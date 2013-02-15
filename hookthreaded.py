@@ -101,7 +101,7 @@ class readinput(threading.Thread):
             if k >='':break
         if k == "q":print '''[!]QUITTING, IMVU WILL CRASH WITH THIS (EXPECTED) ERROR:\n\n\nStructuredException: EXCEPTION_BREAKPOINT(80000003)\nParameters: [Something, Something, Something]\n\n''',os._exit(1)
         if k == "s":
-            system('start c:\0xic-zex\Python\imvustuff\snapshot.py')
+            system('start c:\0xic-zex\Python\imvustuff\snapshot.py',shell = True)
     #if k == "":
 def imdbg():
     clear_screen()
