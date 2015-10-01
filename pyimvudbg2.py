@@ -1,4 +1,11 @@
+import platform
 import os
+from os import system
+if "32" not in platform.architecture():
+    print "You are using a 64bit python installation. This will not work with the debugger\nPlease install 32bit 2.7.x"
+    os._exit(-1)
+else:
+    break
 try:
     from pydbg import *
 except ImportError:
@@ -16,7 +23,6 @@ import utils
 import sys
 import datetime
 import threading
-import os
 from os import system
 import platform
 import time
