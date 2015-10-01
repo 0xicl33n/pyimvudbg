@@ -1,4 +1,14 @@
-from pydbg import *
+import os
+try:
+    from pydbg import *
+except ImportError:
+    print "You must install paimei\nPlease get it here:\n\nhttps://github.com/OpenRCE/paimei"
+    os._exit(-1)
+try:
+    import win32gui,win32con
+except ImportError:
+    print "You must install win32api\nPlease get it here:\n\nhttp://sourceforge.net/projects/pywin32/"
+    os._exit(-1)
 from pydbg.defines import *
 import logging
 import struct
@@ -14,8 +24,6 @@ import subprocess
 import getpass
 #import snapshot
 #snapit = snapshot.snapshotter()
-import win32gui
-import win32con
 import sys
 hwnd = win32gui.GetForegroundWindow()
 win32gui.ShowWindow(hwnd, win32con.SW_MAXIMIZE)
@@ -76,7 +84,7 @@ def printreg():
     print pydbg.context.Eip
 #this code left intentionally undocumented
 exe = "imvuclient.exe"
-for (pid, name) in dbg.enumerate_processes():
+'''for (pid, name) in dbg.enumerate_processes():
     x = name.lower()
     if x == exe:
         break
@@ -93,7 +101,7 @@ for (pid, name) in dbg.enumerate_processes():
         print '2...'
         time.sleep(1)
         print '1...'
-        break
+        break'''
 now = datetime.datetime.now()
 class _Getch:    
     def __init__(self):
