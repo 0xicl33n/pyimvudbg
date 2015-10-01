@@ -1,8 +1,9 @@
 pyimvudbg
 =========
 
-imvu debugger written in python, forked from a firefox hook
+A simple debugger written in python for a chat program known as IMVU, forked from a firefox nspr4.dll hook
 
-Fire up the one named pyimvudbg(obviously)
+Usage:
+Fire up the one named `pyimvudbg.py`
 
-everything else still experimental
+Everything is experimental and breaks often.
