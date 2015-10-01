@@ -63,7 +63,7 @@ def logo():print '''
   ## # GE     D ##  
   ##   ########:GG         IMVU Debug Hook
    #####i;##     :            By Exploit
-   ##       ;# ## E              2.1
+   ##       ;# ## E              2.2-dev
    #, # ## . # ## # 
    ## ### ;# #### # 
    ##  ## ##  ## K# 
