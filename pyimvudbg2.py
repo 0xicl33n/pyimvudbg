@@ -35,6 +35,7 @@ snapshot = '%s\\snapshot.exe'%(cwd)
 path = '''C:\Users\\"%s"\\AppData\\Roaming\\IMVUClient\\imvuclient.exe'''%(user)
 buffer = ""
 dbg = pydbg()
+#cant make this work for some reason
 def handler_breakpoint(dbg):
     print '--------------------------------Dumping context'
     print dbg.dump_context()
@@ -61,7 +62,7 @@ def logo():print '''
   #E # # ## # .# #  
   ## # # W# #  : #  
   ## # GE     D ##  
-  ##   ########:GG         IMVU Debug Hook
+  ##   ########:GG         IMVU nspr4.dll hook
    #####i;##     :            By Exploit
    ##       ;# ## E              2.2-dev
    #, # ## . # ## # 
@@ -78,13 +79,13 @@ def clear_screen():
     elif platClear == "windows":
         os.system('cls')
 def printreg():
+    #this does not work lol
     print 'EAX is',pydbg.context.Eax
     print pydbg.context.Edp
     print pydbg.context.Esp
     print pydbg.context.Eip
-#this code left intentionally undocumented
 exe = "imvuclient.exe"
-'''for (pid, name) in dbg.enumerate_processes():
+for (pid, name) in dbg.enumerate_processes():
     x = name.lower()
     if x == exe:
         break
@@ -101,8 +102,9 @@ exe = "imvuclient.exe"
         print '2...'
         time.sleep(1)
         print '1...'
-        break'''
+        break
 now = datetime.datetime.now()
+#getch allows commands to be sent to the program as its running (supposedly)
 class _Getch:    
     def __init__(self):
         try:
@@ -132,6 +134,7 @@ class _GetchWindows:
         import msvcrt
         return msvcrt.getch()
 inkey = _Getch()
+#getch results
 class readinput(threading.Thread):
     def run(self):
         for i in xrange(sys.maxint):
@@ -151,6 +154,7 @@ class readinput(threading.Thread):
             imdbg()
         if k == "d":
             handler_breakpoint(pid)
+#this is main
 def imdbg():
     clear_screen()
     dbg = pydbg()
@@ -159,8 +163,19 @@ def imdbg():
     logo()
     print 'Python',(sys.version),'\n'
     pattern = raw_input("\n[?] What string to search for? >\n")
+    #20151001 - added error checking, previously entering nothing would cause the program to not work
+    if pattern =="":
+        print "[!] Please enter a string"
+        imdbg() #iterate back to main
+        #run_nopattern() will come at a later date
     logme = raw_input("\n[?] Would you like to log my output to a text file?  ( y/n )")
+        if logme =="":
+        print "[!] Please enter a string"
+        imdbg()
     v = raw_input('\n[?] Use verbose mode?(no output at all)(y/n)')
+        if v =="":
+        print "[!] Please enter a string"
+        imdbg()
     if logme == "y":
         print "[@] OUTPUT LOGGING ENABLED!"
         print "[@] Placing search string in log..."
