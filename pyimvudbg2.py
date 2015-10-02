@@ -1,20 +1,22 @@
+#!/usr/bin/env python
+#!/c/Python27/python.exe
 import platform
 import os
 from os import system
-if "32" not in platform.architecture():
+if "32bit" not in platform.architecture():
     print "You are using a 64bit python installation. This will not work with the debugger\nPlease install 32bit 2.7.x"
     os._exit(-1)
 else:
-    break
+    pass
 try:
     from pydbg import *
 except ImportError:
-    print "You must install paimei\nPlease get it here:\n\nhttps://github.com/OpenRCE/paimei"
+    print "\n[!] ERORR - PAIMEI NOT FOUND\n\nPlease get it here:\nhttps://github.com/OpenRCE/paimei"
     os._exit(-1)
 try:
     import win32gui,win32con
 except ImportError:
-    print "You must install win32api\nPlease get it here:\n\nhttp://sourceforge.net/projects/pywin32/"
+    print "\n[!] ERROR - WIN32API NOT FOUND\n\nPlease get it here:\nhttp://sourceforge.net/projects/pywin32/"
     os._exit(-1)
 from pydbg.defines import *
 import logging
@@ -24,10 +26,12 @@ import sys
 import datetime
 import threading
 from os import system
-import platform
 import time
 import subprocess
 import getpass
+#testing new method of calling the client
+import windowsinfo
+path = windowsinfo.client()
 #import snapshot
 #snapit = snapshot.snapshotter()
 import sys
@@ -35,10 +39,8 @@ hwnd = win32gui.GetForegroundWindow()
 win32gui.ShowWindow(hwnd, win32con.SW_MAXIMIZE)
 user = str(getpass.getuser())
 cwd = os.getcwd()
-os.system('title IMVU Debugger')
-animation = '''|/-\\'''
+os.system('title IMVU Debugger by Exploit')
 snapshot = '%s\\snapshot.exe'%(cwd)
-path = '''C:\Users\\"%s"\\AppData\\Roaming\\IMVUClient\\imvuclient.exe'''%(user)
 buffer = ""
 dbg = pydbg()
 #cant make this work for some reason
@@ -48,21 +50,19 @@ def handler_breakpoint(dbg):
     return DBG_CONTINUE 
 # register a breakpoint handler function.
 def check_accessv(dbg):
-
-    # We skip first-chance exceptions
+    # skip first-chance exceptions
     if dbg.dbg.u.Exception.dwFirstChance:
             return DBG_EXCEPTION_NOT_HANDLED
-
     crash_bin = utils.crash_binning.crash_binning()
     crash_bin.record_crash(dbg)
     print crash_bin.crash_synopsis()
-
     dbg.terminate_process()
+# this doesnt work
 #dbg.set_callback(EXCEPTION_ACCESS_VIOLATION,check_accessv)
 #dbg.set_callback(EXCEPTION_BREAKPOINT, handler_breakpoint)
 def logo():print '''
   G#: #  ####tK#    
-  #    j#       #   
+  #    j#       #   `
  ,# D# #; #####.    
   #W # # #W;# W# #  
   #E # # ## # .# #  
@@ -117,7 +117,6 @@ class _Getch:
             self.impl = _GetchWindows()
         except ImportError:
             self.impl = _GetchUnix()
-
     def __call__(self): return self.impl()
 class _GetchUnix:
     def __init__(self):
@@ -158,6 +157,7 @@ class readinput(threading.Thread):
             dbg.attach(int(pid))
             pattern = None
             imdbg()
+        #having trouble with this
         if k == "d":
             handler_breakpoint(pid)
 #this is main
@@ -167,7 +167,8 @@ def imdbg():
     found_imvu = False
     logging.basicConfig(filename='hook.log',level=logging.DEBUG)
     logo()
-    print 'Python',(sys.version),'\n'
+    #this isnt needed 
+    #print 'Python',(sys.version),'\n'
     pattern = raw_input("\n[?] What string to search for? >\n")
     #20151001 - added error checking, previously entering nothing would cause the program to not work
     if pattern =="":
@@ -175,11 +176,11 @@ def imdbg():
         imdbg() #iterate back to main
         #run_nopattern() will come at a later date
     logme = raw_input("\n[?] Would you like to log my output to a text file?  ( y/n )")
-        if logme =="":
+    if logme =="":
         print "[!] Please enter a string"
         imdbg()
     v = raw_input('\n[?] Use verbose mode?(no output at all)(y/n)')
-        if v =="":
+    if v =="":
         print "[!] Please enter a string"
         imdbg()
     if logme == "y":
