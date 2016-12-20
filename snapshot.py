@@ -59,7 +59,7 @@ class snapshotter(object):
         self.dbg.resume_all_threads()
 
   def start_debugger(self):
-    self.dbg = pydbg()
+    self.dbg = pydbg
     pid = self.dbg.load(self.exe_path)
     self.pid = self.dbg.pid
     self.dbg.run()
