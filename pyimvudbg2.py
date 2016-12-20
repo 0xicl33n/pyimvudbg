@@ -11,7 +11,7 @@ else:
 try:
     from pydbg import *
 except ImportError:
-    print "\n[!] ERORR - PAIMEI NOT FOUND\n\nPlease get it here:\nhttps://github.com/OpenRCE/paimei"
+    print "\n[!] ERORR - PAIMEI NOT FOUND\n\nPlease get it here:\nhttps://github.com/0xicl33n/paimei"
     os._exit(-1)
 try:
     import win32gui,win32con
@@ -20,21 +20,18 @@ except ImportError:
     os._exit(-1)
 from pydbg.defines import *
 import logging
-import struct
 import utils
 import sys
 import datetime
 import threading
 from os import system
 import time
-import subprocess
 import getpass
 #testing new method of calling the client
 import windowsinfo
 path = windowsinfo.client()
 #import snapshot
 #snapit = snapshot.snapshotter()
-import sys
 hwnd = win32gui.GetForegroundWindow()
 win32gui.ShowWindow(hwnd, win32con.SW_MAXIMIZE)
 user = str(getpass.getuser())
@@ -42,22 +39,21 @@ cwd = os.getcwd()
 os.system('title IMVU Debugger by Exploit')
 snapshot = '%s\\snapshot.exe'%(cwd)
 buffer = ""
-dbg = pydbg()
+dbg = pydbg
 #cant make this work for some reason
 def handler_breakpoint(dbg):
     print '--------------------------------Dumping context'
     print dbg.dump_context()
-    return DBG_CONTINUE 
 # register a breakpoint handler function.
 def check_accessv(dbg):
     # skip first-chance exceptions
     if dbg.dbg.u.Exception.dwFirstChance:
-            return DBG_EXCEPTION_NOT_HANDLED
+        pass
     crash_bin = utils.crash_binning.crash_binning()
     crash_bin.record_crash(dbg)
     print crash_bin.crash_synopsis()
     dbg.terminate_process()
-# this doesnt work
+#this doesnt work
 #dbg.set_callback(EXCEPTION_ACCESS_VIOLATION,check_accessv)
 #dbg.set_callback(EXCEPTION_BREAKPOINT, handler_breakpoint)
 def logo():print '''
@@ -84,12 +80,6 @@ def clear_screen():
         os.system('clear')
     elif platClear == "windows":
         os.system('cls')
-def printreg():
-    #this does not work lol
-    print 'EAX is',pydbg.context.Eax
-    print pydbg.context.Edp
-    print pydbg.context.Esp
-    print pydbg.context.Eip
 exe = "imvuclient.exe"
 for (pid, name) in dbg.enumerate_processes():
     x = name.lower()
@@ -120,9 +110,9 @@ class _Getch:
     def __call__(self): return self.impl()
 class _GetchUnix:
     def __init__(self):
-        import tty, sys
+        import tty
     def __call__(self):
-        import sys, tty, termios
+        import termios
         fd = sys.stdin.fileno()
         old_settings = termios.tcgetattr(fd)
         try:
@@ -163,7 +153,6 @@ class readinput(threading.Thread):
 #this is main
 def imdbg():
     clear_screen()
-    dbg = pydbg()
     found_imvu = False
     logging.basicConfig(filename='hook.log',level=logging.DEBUG)
     logo()
@@ -209,13 +198,11 @@ def imdbg():
                     print "[>] Pre-Encrypted: %s" % buffer
                 else:
                     print "[>] Pre-Encrypted: %s" % buffer
-
-        return DBG_CONTINUE
     for (pid, name) in dbg.enumerate_processes():
         if name.lower() == "imvuclient.exe":
             found_imvu = True
             hooks = utils.hook_container()
-            dbg.set_callback(EXCEPTION_ACCESS_VIOLATION,check_accessv)
+            dbg.set_callback(check_accessv)
             dbg.attach(int(pid))
             print "[!] Attaching to IMVU with PID: %d..." % pid
             hook_address  = dbg.func_resolve_debuggee("nspr4.dll","PR_Write")
