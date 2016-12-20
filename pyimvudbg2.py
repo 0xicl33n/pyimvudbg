@@ -1,8 +1,23 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #!/c/Python27/python.exe
 import platform
 import os
 from os import system
+from pydbg.defines import *
+import logging
+import utils
+import sys
+import datetime
+import threading
+from os import system
+import time
+import getpass
+#testing new method of calling the client
+import windowsinfo
+path = windowsinfo.client()
+#import snapshot
+#snapit = snapshot.snapshotter()
+ver = '2.2.0'
 if "32bit" not in platform.architecture():
     print "You are using a 64bit python installation. This will not work with the debugger\nPlease install 32bit 2.7.x"
     os._exit(-1)
@@ -18,20 +33,6 @@ try:
 except ImportError:
     print "\n[!] ERROR - WIN32API NOT FOUND\n\nPlease get it here:\nhttp://sourceforge.net/projects/pywin32/"
     os._exit(-1)
-from pydbg.defines import *
-import logging
-import utils
-import sys
-import datetime
-import threading
-from os import system
-import time
-import getpass
-#testing new method of calling the client
-import windowsinfo
-path = windowsinfo.client()
-#import snapshot
-#snapit = snapshot.snapshotter()
 hwnd = win32gui.GetForegroundWindow()
 win32gui.ShowWindow(hwnd, win32con.SW_MAXIMIZE)
 user = str(getpass.getuser())
@@ -66,14 +67,14 @@ def logo():print '''
   ## # GE     D ##  
   ##   ########:GG         IMVU nspr4.dll hook
    #####i;##     :            By Exploit
-   ##       ;# ## E              2.2-dev
+   ##       ;# ## E              %s
    #, # ## . # ## # 
    ## ### ;# #### # 
    ##  ## ##  ## K# 
     ## GW ###   E#  
     W##  ########.  
      #####   ###    
-      E##\npress p to pause execution\t(experimental)\npress r to search for a new string(experimental)\npress s to open the snapshotter\t(experimental)\npress d to dump registars\t(experimental)\npress q to quit\n'''
+      E##\npress p to pause execution\t(experimental)\npress r to search for a new string(experimental)\npress s to open the snapshotter\t(experimental)\npress d to dump registars\t(experimental)\npress q to quit\n''' %(ver)
 def clear_screen():
     platClear = platform.system().lower()
     if platClear == "linux" or platClear == "unix": 
